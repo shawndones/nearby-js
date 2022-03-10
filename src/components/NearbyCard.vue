@@ -1,30 +1,39 @@
 
-
 <script setup lang="ts">
+import { PropType } from 'vue'
+import { ItemProps, LatLon } from '../interfaces'
+import { useAppStore } from '../store';
 
-    // Setup gives access to global define props
-    export interface ItemProps {
-        name: string;
-        address: string;
-        bearing: string;
-        distance: number;
-    }
+const app = useAppStore()
 
-    // expect to get properties to this component based on interace of ItemProps
-    defineProps<ItemProps>();
+const props = defineProps({
+    name: String,
+    address: String,
+    bearing: String,
+    distance: Number,
+    location: Object as PropType<LatLon>
+})
+
+function  onClickHandler() {
+    app.selectedItem =  props as ItemProps
+    app.isMap = true
+}
 
 </script>
-
 <template>
-     <calcite-card>
-         <span slot="title">{{ name }}</span>
+     <calcite-card @click="onClickHandler">
+         <span slot="title"><calcite-icon icon="beaker"></calcite-icon>{{ name }}</span>
          <span slot="subtitle">
-             {{ bearing }}
-             <small>{{ distance.toFixed(2) }}m</small>
+             {{ bearing }} 
+             <small>{{ distance?.toFixed(2) }}m</small>
              <small>{{ address }}</small>
          </span>
     </calcite-card>
 </template>
+
+
 <style scoped>
-    
+.calcite-card {
+    cursor: pointer;
+}
 </style>

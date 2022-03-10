@@ -1,60 +1,50 @@
 <script setup lang="ts">
-    defineProps()
+import { defineCustomElements } from '@esri/calcite-components/dist/custom-elements';
+import Search from '@arcgis/core/widgets/Search'
+import NearbyList from './NearbyList.vue'
+// import { ItemProps } from '../interface'
+
+import {defineComponent, Prop} from 'vue'
+import { PropType, onMounted, ref } from 'vue'
+import { ItemProps } from '../interfaces';
+
+
+defineCustomElements();
+
+defineProps({
+    items: Array as PropType<ItemProps[]>
+})
+
+const searchRef = ref<HTMLDivElement>()
+
+onMounted(() => {
+     const search = new Search({
+                    container: searchRef.value,
+                })
+})
+
 </script>
 
 <script lang="ts">
-    import NearbyCard, { ItemProps } from './NearbyCard.vue'
-    import { locate } from '../data/locate'
-    import { findNearbyPlaces } from  '../data/places'
-
-
-    // const items:ItemProps[] = [
-    //     {   
-    //         name: 'Donut Shop',
-    //         address: '555 Main St, 90210',
-    //         bearing: 'SE',
-    //         distance: 22.4
-    //     },
-    //     {
-    //         name: 'Coffee Shop',
-    //         address: '555 1st St, 90210',
-    //         bearing: 'N',
-    //         distance: 5.2
-    //     },
-
-    // ]
-
-    const categories = [ 'Coffee Shop' ]
+    
     export default {
         components: {
-            NearbyCard
+            NearbyList,
         },
-        data() {
-            return {
-                items: []
-            }
-        },
-        async mounted() {
-            const latlon = await locate()
-            const response = await findNearbyPlaces(latlon, categories)
-            console.log("🚀 ~ file: Home.vue ~ line 40 ~ mounted ~ response", response)
-            
-        }
+       props: {
+           items: {
+               type: Array as PropType<ItemProps[]>
+           }
+       },
     }
 
 </script>
 
 <template>
+    <div class="search-container"></div>
     <div class="card-container">
-        <calcite-list 
-            v-for="{ name, address, distance, bearing } in items"
-           >
-        <NearbyCard 
-            :name="name"
-            :address="address"
-            :distance="distance"
-            :bearing="bearing"></NearbyCard>
-        </calcite-list>
+        <!-- if isMap == true then <WebMapView /> else <NearbyList /> -->
+        <NearbyList :items="items"/>
     </div>
 </template>
 
@@ -64,5 +54,6 @@
     }
     .card-container {
         width: 100%;
+        margin-bottom: 40px;
     }
 </style>

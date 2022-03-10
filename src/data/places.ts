@@ -1,12 +1,7 @@
 import Point from '@arcgis/core/geometry/Point';
 import { addressToLocations } from '@arcgis/core/rest/locator'
 import { geocodeURL, maxLocations } from '../config';
-
-
-export interface LatLon {
-    latitude: number;
-    longitude: number;
-}
+import { LatLon } from '../interfaces';
 
 
 /**
@@ -21,6 +16,7 @@ export interface LatLon {
 	const results = await addressToLocations(geocodeURL, {
 		address: undefined,
 		location: point,
+		categories,
 		maxLocations,
 		outFields: ['Place_addr', 'PlaceName', 'Phone', 'URL', 'Type'],
 	});
