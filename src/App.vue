@@ -18,7 +18,7 @@ const app = useAppStore()
 
 onMounted( async () => {
   const latlon = await locate();
-  const response = await findNearbyPlaces(latlon, ['Coffee Shop']);
+  const response = await findNearbyPlaces(latlon, ['Wildlife Reserve', 'Fishing', 'Mountain']);
   // console.log("🚀 ~ file: App.vue ~ line 22 ~ onMounted ~ response", response)
   
   const items = response.map((a) => ({
